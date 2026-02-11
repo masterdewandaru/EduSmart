@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Modul Ajar Kurikulum Merdeka - AI Powered</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .api-setup {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .api-setup h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .api-setup p {
+            margin-bottom: 10px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .api-setup a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .api-setup a:hover {
+            text-decoration: underline;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result h3 {
+            color: #28a745;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .result-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .result-content h4 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .result-content ul, .result-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .result-content li {
+            margin-bottom: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .error {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f5c6cb;
+            margin-top: 20px;
+        }
+
+        .error.active {
+            display: block;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            color: #0c5460;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Generator Modul Ajar Kurikulum Merdeka</h1>
+            <p>Powered by Google Gemini AI</p>
+        </div>
+
+        <div class="content">
+            <!-- API Setup Section -->
+            <div class="api-setup">
+                <h3>🔑 Setup Google Gemini API Key</h3>
+                <p>Untuk menggunakan aplikasi ini, Anda memerlukan API key dari Google AI Studio:</p>
+                <p>1. Kunjungi <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></p>
+                <p>2. Buat project baru atau gunakan yang sudah ada</p>
+                <p>3. Generate API key</p>
+                <p>4. Masukkan API key di bawah ini</p>
+                
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="apiKey">Google Gemini API Key:</label>
+                    <input type="password" id="apiKey" placeholder="Masukkan API key Anda di sini...">
+                </div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <p><strong>💡 Tips:</strong> Isi semua informasi dengan lengkap untuk hasil modul ajar yang lebih detail dan berkualitas.</p>
+            </div>
+
+            <!-- Form Input -->
+            <form id="modulForm">
+                <div class="row">
+                    <div class="form-group">
+                        <label for="mata_pelajaran">Mata Pelajaran:</label>
+                        <input type="text" id="mata_pelajaran" required placeholder="Contoh: Matematika">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fase">Fase/Kelas:</label>
+                        <select id="fase" required>
+                            <option value="">Pilih Fase</option>
+                            <option value="Fase A (Kelas 1-2 SD)">Fase A (Kelas 1-2 SD)</option>
+                            <option value="Fase B (Kelas 3-4 SD)">Fase B (Kelas 3-4 SD)</option>
+                            <option value="Fase C (Kelas 5-6 SD)">Fase C (Kelas 5-6 SD)</option>
+                            <option value="Fase D (Kelas 7-9 SMP)">Fase D (Kelas 7-9 SMP)</option>
+                            <option value="Fase E (Kelas 10 SMA)">Fase E (Kelas 10 SMA)</option>
+                            <option value="Fase F (Kelas 11-12 SMA)">Fase F (Kelas 11-12 SMA)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="topik">Topik/Materi Pembelajaran:</label>
+                    <input type="text" id="topik" required placeholder="Contoh: Operasi Bilangan Bulat">
+                </div>
+
+                <div class="form-group">
+                    <label for="capaian_pembelajaran">Capaian Pembelajaran (CP):</label>
+                    <textarea id="capaian_pembelajaran" required placeholder="Jelaskan capaian pembelajaran yang ingin dicapai..."></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="alokasi_waktu">Alokasi Waktu:</label>
+                        <input type="text" id="alokasi_waktu" required placeholder="Contoh: 3 x 40 menit">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model_pembelajaran">Model Pembelajaran:</label>
+                        <select id="model_pembelajaran" required>
+                            <option value="">Pilih Model</option>
+                            <option value="Problem Based Learning (PBL)">Problem Based Learning (PBL)</option>
+                            <option value="Project Based Learning (PjBL)">Project Based Learning (PjBL)</option>
+                            <option value="Discovery Learning">Discovery Learning</option>
+                            <option value="Inquiry Learning">Inquiry Learning</option>
+                            <option value="Cooperative Learning">Cooperative Learning</option>
+                            <option value="Contextual Teaching and Learning (CTL)">Contextual Teaching and Learning (CTL)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tujuan_pembelajaran">Tujuan Pembelajaran:</label>
+                    <textarea id="tujuan_pembelajaran" placeholder="Opsional: Jelaskan tujuan pembelajaran spesifik..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="catatan_tambahan">Catatan Tambahan (Opsional):</label>
+                    <textarea id="catatan_tambahan" placeholder="Tambahkan informasi khusus, karakteristik siswa, atau kebutuhan khusus lainnya..."></textarea>
+                </div>
+
+                <button type="submit" class="btn" id="generateBtn">
+                    ✨ Generate Modul Ajar dengan AI
+                </button>
+            </form>
+
+            <!-- Loading State -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Sedang membuat modul ajar Anda menggunakan AI Google Gemini...</p>
+                <p style="color: #666; margin-top: 10px;">Mohon tunggu beberapa saat</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error" id="error"></div>
+
+            <!-- Result Section -->
+            <div class="result" id="result">
+                <h3>📄 Modul Ajar Anda Siap!</h3>
+                <div class="result-content" id="resultContent"></div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="copyToClipboard()">📋 Salin ke Clipboard</button>
+                    <button class="btn" onclick="downloadModul()">💾 Download (.txt)</button>
+                    <button class="btn btn-secondary" onclick="resetForm()">🔄 Buat Modul Baru</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let generatedContent = '';
+
+        document.getElementById('modulForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const apiKey = document.getElementById('apiKey').value.trim();
+            if (!apiKey) {
+                showError('Harap masukkan Google Gemini API Key terlebih dahulu!');
+                return;
+            }
+
+            // Collect form data
+            const formData = {
+                mata_pelajaran: document.getElementById('mata_pelajaran').value,
+                fase: document.getElementById('fase').value,
+                topik: document.getElementById('topik').value,
+                capaian_pembelajaran: document.getElementById('capaian_pembelajaran').value,
+                alokasi_waktu: document.getElementById('alokasi_waktu').value,
+                model_pembelajaran: document.getElementById('model_pembelajaran').value,
+                tujuan_pembelajaran: document.getElementById('tujuan_pembelajaran').value,
+                catatan_tambahan: document.getElementById('catatan_tambahan').value
+            };
+
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('result').classList.remove('active');
+            document.getElementById('error').classList.remove('active');
+            document.getElementById('generateBtn').disabled = true;
+
+            try {
+                const prompt = createPrompt(formData);
+                const content = await generateWithGemini(apiKey, prompt);
+                generatedContent = content;
+                displayResult(content);
+            } catch (error) {
+                showError('Terjadi kesalahan: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('generateBtn').disabled = false;
+            }
+        });
+
+        function createPrompt(data) {
+            return `Buatkan modul ajar lengkap berdasarkan Kurikulum Merdeka dengan detail berikut:
+
+INFORMASI UMUM:
+- Mata Pelajaran: ${data.mata_pelajaran}
+- Fase/Kelas: ${data.fase}
+- Topik/Materi: ${data.topik}
+- Alokasi Waktu: ${data.alokasi_waktu}
+- Model Pembelajaran: ${data.model_pembelajaran}
+
+CAPAIAN PEMBELAJARAN:
+${data.capaian_pembelajaran}
+
+${data.tujuan_pembelajaran ? `TUJUAN PEMBELAJARAN:\n${data.tujuan_pembelajaran}\n` : ''}
+${data.catatan_tambahan ? `CATATAN TAMBAHAN:\n${data.catatan_tambahan}\n` : ''}
+
+Buatkan modul ajar yang lengkap dan terstruktur dengan komponen berikut:
+
+1. INFORMASI UMUM
+   - Nama Penyusun
+   - Institusi
+   - Tahun Penyusunan
+   - Jenjang Sekolah
+   - Mata Pelajaran
+   - Fase/Kelas
+   - Materi/Topik
+   - Alokasi Waktu
+
+2. KOMPETENSI AWAL
+   - Pengetahuan dan keterampilan yang sudah dimiliki siswa
+
+3. PROFIL PELAJAR PANCASILA
+   - Dimensi profil yang dikembangkan (minimal 2)
+
+4. SARANA DAN PRASARANA
+   - Alat dan bahan yang dibutuhkan
+   - Media pembelajaran
+
+5. TARGET PESERTA DIDIK
+   - Karakteristik siswa (reguler, advanced, atau dengan kebutuhan khusus)
+
+6. MODEL PEMBELAJARAN
+   - ${data.model_pembelajaran}
+   - Deskripsi penerapannya
+
+7. CAPAIAN PEMBELAJARAN
+   - ${data.capaian_pembelajaran}
+
+8. TUJUAN PEMBELAJARAN
+   - Tujuan pembelajaran yang spesifik dan terukur (minimal 3)
+
+9. PEMAHAMAN BERMAKNA
+   - Makna dan relevansi pembelajaran dalam kehidupan nyata
+
+10. PERTANYAAN PEMANTIK
+    - Pertanyaan kunci untuk memancing pemikiran kritis (minimal 3)
+
+11. KEGIATAN PEMBELAJARAN
+    
+    A. PERSIAPAN PEMBELAJARAN
+       - Persiapan guru
+       - Persiapan siswa
+    
+    B. KEGIATAN PENDAHULUAN (... menit)
+       - Langkah-langkah detail
+       - Aktivitas pembuka
+    
+    C. KEGIATAN INTI (... menit)
+       - Langkah-langkah detail sesuai ${data.model_pembelajaran}
+       - Aktivitas siswa
+       - Peran guru
+    
+    D. KEGIATAN PENUTUP (... menit)
+       - Refleksi
+       - Kesimpulan
+       - Tindak lanjut
+
+12. ASESMEN
+    
+    A. ASESMEN DIAGNOSTIK
+       - Metode dan instrumen
+    
+    B. ASESMEN FORMATIF
+       - Metode dan instrumen
+    
+    C. ASESMEN SUMATIF
+       - Metode dan instrumen
+       - Rubrik penilaian
+
+13. PENGAYAAN DAN REMEDIAL
+    - Kegiatan pengayaan untuk siswa yang lebih cepat
+    - Kegiatan remedial untuk siswa yang membutuhkan bantuan
+
+14. REFLEKSI GURU DAN PESERTA DIDIK
+    - Pertanyaan refleksi untuk guru
+    - Pertanyaan refleksi untuk siswa
+
+15. LAMPIRAN
+    - LKPD (Lembar Kerja Peserta Didik)
+    - Bahan bacaan
+    - Glosarium (jika diperlukan)
+
+Gunakan bahasa Indonesia yang baik dan benar, profesional, dan sesuai dengan konteks pendidikan Indonesia. Buat modul yang praktis dan siap digunakan oleh guru.`;
+        }
+
+        async function generateWithGemini(apiKey, prompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: prompt
+                        }]
+                    }],
+                    generationConfig: {
+                        temperature: 0.7,
+                        topK: 40,
+                        topP: 0.95,
+                        maxOutputTokens: 8192,
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || 'Gagal menghubungi Google Gemini API. Periksa API key Anda.');
+            }
+
+            const data = await response.json();
+            
+            if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+                throw new Error('Format respons tidak valid dari API');
+            }
+
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        function displayResult(content) {
+            document.getElementById('resultContent').innerHTML = formatContent(content);
+            document.getElementById('result').classList.add('active');
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function formatContent(content) {
+            // Simple formatting for better readability
+            return content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('error');
+            errorEl.textContent = message;
+            errorEl.classList.add('active');
+            errorEl.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(generatedContent).then(() => {
+                alert('Modul ajar berhasil disalin ke clipboard!');
+            }).catch(() => {
+                alert('Gagal menyalin. Silakan coba lagi.');
+            });
+        }
+
+        function downloadModul() {
+            const mata_pelajaran = document.getElementById('mata_pelajaran').value;
+            const topik = document.getElementById('topik').value;
+            const filename = `Modul_Ajar_${mata_pelajaran}_${topik}.txt`.replace(/ /g, '_');
+            
+            const blob = new Blob([generatedContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function resetForm() {
+            document.getElementById('modulForm').reset();
+            document.getElementById('result').classList.remove('active');
+            document.getElementById('error').classList.remove('active');
+            generatedContent = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
